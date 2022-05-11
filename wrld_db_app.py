@@ -1,5 +1,3 @@
-from enum import auto
-from multiprocessing.sharedctypes import Value
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -10,7 +8,6 @@ import seaborn as sns
 import altair as alt
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import requests
 import streamlit as st
 from millify import millify
 from numerize import numerize
