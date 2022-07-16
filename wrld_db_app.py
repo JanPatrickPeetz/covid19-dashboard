@@ -9,9 +9,7 @@ import altair as alt
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
-from millify import millify
-from numerize import numerize
-from prophet import Prophet
+
 
 
 #### page settings
@@ -66,7 +64,8 @@ def main():
     #Concat tables df_data_country and df_country_pos into df_data_country
     df_data_country = pd.concat([df_data_country, df_country_pos], axis=1).reindex(df_data_country.index)
     # setting datatypes for columns
-    df_data_country['100000Cases7Days'] = df_data_country['100000Cases7Days'].astype(float).round(2)
+    #df_data_country['100000Cases7Days'] = df_data_country['100000Cases7Days'].astype(float).round(2)
+    df_data_country['100000Cases7Days'] = df_data_country['100000Cases7Days'].replace('.',',').astype(float)
     # drop all rows where latitude = <NA>
     df_data_country = df_data_country.dropna(0, subset=['country_code'])
 
@@ -226,7 +225,7 @@ def main():
                 country_choice = df_data_country.index
                 z_country = df_data_country['100000Cases7Days'].round(1)
     
-    
+
 # show totalcases world map
     fig_map = go.Figure(
                 data=go.Choropleth(
@@ -235,7 +234,8 @@ def main():
                 #locations= df_data_country['Name'].filter(like=option_country),
                 z= z_country,
                 zmin = df_data_country['100000Cases7Days'].min(), # defining min value for colorscale
-                zmax = df_data_country['100000Cases7Days'].max(), # defining max value for colorscale
+                zmax = 2000,
+                #zmax = df_data_country['100000Cases7Days'].max(), # defining max value for colorscale
                 #text = df_data_country['Name'].filter(like=option_country),
                 text = country_choice, 
                 colorscale = 'blues',
@@ -252,7 +252,7 @@ def main():
                 width=1300,
                 #height=600,
                 margin={"r":0,"t":0,"l":0,"b":0},
-                autosize=False,
+                autosize=True,
                 hovermode='closest',
             )
     fig_map.update_geos(
